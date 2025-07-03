@@ -9,6 +9,7 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parsedFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -47,9 +48,26 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const contactData = {
+    ...req.body,
+    userId: req.user._id,
+  };
+  if (photoUrl) {
+    contactData.photo = photoUrl;
+  }
+
   const contact = await createContact({
     ...req.body,
     userId: req.user._id,
+    photo: photoUrl,
   });
 
   res.status(201).json({
@@ -59,14 +77,26 @@ export const createContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res) => {
+export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const payload = req.body;
+  const photo = req.file;
+  let photoUrl;
 
-  const updatedContact = await patchContact(contactId, payload, req.user._id);
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const updatedContact = await patchContact(
+    contactId,
+    {
+      ...req.body,
+      ...(photoUrl && { photo: photoUrl }),
+    },
+    req.user._id,
+  );
 
   if (!updatedContact) {
-    throw createHttpError(404, 'Contact not found');
+    return next(createHttpError(404, 'Contact not found'));
   }
 
   res.status(200).json({
@@ -81,7 +111,7 @@ export const deleteContactController = async (req, res, next) => {
   const deletedContact = await deleteContact(contactId, req.user._id);
 
   if (!deletedContact) {
-    throw createHttpError(404, 'Contact not found');
+    return next(createHttpError(404, 'Contact not found'));
   }
 
   res.sendStatus(204);
