@@ -1,0 +1,22 @@
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../components/schemas/auth/register.yaml
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: ../../components/schemas/auth/userResponse.yaml
+        '400':
+          $ref: ../../components/responses/400.yaml

@@ -1,0 +1,16 @@
+type: object
+properties:
+  status:
+    type: integer
+    example: 200
+  message:
+    type: string
+    example: 'Successfully logged in an user!'
+  data:
+    type: object
+    required:
+      - accessToken
+    properties:
+      accessToken:
+        type: string
+        example: 'F6tBNDZd2jxfan8XWNQXar24K0JbWHWJu4XTvOk5'
