@@ -15,6 +15,11 @@
       "description": "Local development server"
     }
   ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "tags": [
     {
       "name": "Contacts",
@@ -453,7 +458,7 @@
                     "example": "work"
                   },
                   "photo": {
-                    "description": "Student's photo",
+                    "description": "Contact's photo",
                     "type": "string",
                     "format": "binary"
                   }
@@ -503,172 +508,190 @@
     },
     "/auth/login": {
       "post": {
-        "/auth/login": {
-          "post": {
-            "tags": [
-              "Auth"
-            ],
-            "summary": "Log in a user",
-            "operationId": "loginUser",
-            "requestBody": {
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "../../components/schemas/auth/login.yaml"
-                  }
-                }
-              }
-            },
-            "responses": {
-              "200": {
-                "description": "User successfully logged in",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "../../components/schemas/auth/loginResponse.yaml"
-                    }
-                  }
-                }
-              },
-              "401": {
-                "$ref": "../../components/responses/401.yaml"
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Log in a user",
+        "operationId": "loginUser",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       }
     },
     "/auth/refresh": {
       "post": {
-        "post": {
-          "tags": [
-            "Auth"
-          ],
-          "summary": "Refresh user session",
-          "operationId": "refreshSession",
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "New access token issued",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "../../components/schemas/tokenResponse.yaml"
-                  }
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh user session",
+        "operationId": "refreshSession",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New access token issued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tokenResponse"
                 }
               }
-            },
-            "401": {
-              "$ref": "../../components/responses/401.yaml"
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       }
     },
     "/auth/logout": {
       "post": {
-        "/auth/logout": {
-          "post": {
-            "tags": [
-              "Auth"
-            ],
-            "summary": "Log out user",
-            "operationId": "logoutUser",
-            "security": [
-              {
-                "bearerAuth": []
-              }
-            ],
-            "responses": {
-              "204": {
-                "description": "User successfully logged out"
-              },
-              "401": {
-                "$ref": "../../components/responses/401.yaml"
-              }
-            }
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Log out user",
+        "operationId": "logoutUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User successfully logged out"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       }
     },
     "/auth/send-reset-email": {
       "post": {
-        "/auth/send-reset-email": {
-          "post": {
-            "tags": [
-              "Auth"
-            ],
-            "summary": "Send password reset email",
-            "operationId": "sendResetEmail",
-            "requestBody": {
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "../../components/schemas/auth/requestReset.yaml"
-                  }
-                }
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send password reset email",
+        "operationId": "sendResetEmail",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/requestReset"
               }
-            },
-            "responses": {
-              "200": {
-                "description": "Email sent if user exists",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Reset email sent if user exists"
-                        }
-                      }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent if user exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Reset email sent if user exists"
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           }
         }
       }
     },
     "/auth/reset-pwd": {
       "post": {
-        "/auth/reset-pwd": {
-          "post": {
-            "tags": [
-              "Auth"
-            ],
-            "summary": "Reset password",
-            "operationId": "resetPassword",
-            "requestBody": {
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "../../components/schemas/auth/resetPassword.yaml"
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset password",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/resetPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password successfully reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been reset"
+                    }
                   }
                 }
               }
-            },
-            "responses": {
-              "200": {
-                "description": "Password successfully reset",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Password has been reset"
-                        }
-                      }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "description": "User not found or invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found or token is invalid"
                     }
                   }
                 }
@@ -884,6 +907,38 @@
             "type": "string",
             "format": "date-time",
             "example": "2025-07-03T10:13:36.272Z"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "andre@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": 12345678
+          }
+        }
+      },
+      "requestReset": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "andre@example.com"
           }
         }
       }

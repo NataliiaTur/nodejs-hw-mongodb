@@ -6,14 +6,20 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a documentation of contacts app
+
 tags:
   - name: Contacts
     description: Operations related to contact management
   - name: Auth
     description: Operations related to user authentication
+
 servers:
   - url: http://localhost:3000
     description: Local development server
+
+security:
+  - bearerAuth: []
+
 paths:
   /contacts/{id}:
     delete:

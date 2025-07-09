@@ -1,23 +1,23 @@
-/auth/send-reset-email:
-  post:
-    tags:
-      - Auth
-    summary: Send password reset email
-    operationId: sendResetEmail
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/auth/requestReset.yaml
-    responses:
-      '200':
-        description: Email sent if user exists
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Reset email sent if user exists
+tags:
+  - Auth
+summary: Send password reset email
+operationId: sendResetEmail
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/requestReset.yaml
+responses:
+  '200':
+    description: Email sent if user exists
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Reset email sent if user exists
+  '400':
+    $ref: ../../components/responses/400.yaml

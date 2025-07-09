@@ -30,3 +30,8 @@ export const CLOUDINARY = {
 };
 
 export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
+
+export const GOOGLE_PATH = path.join(
+  process.cwd(),
+  'google-auth-contacts.json',
+);

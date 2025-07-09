@@ -1,21 +1,22 @@
-/auth/login:
-  post:
-    tags:
-      - Auth
-    summary: Log in a user
-    operationId: loginUser
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/auth/login.yaml
-    responses:
-      '200':
-        description: User successfully logged in
-        content:
-          application/json:
-            schema:
-              $ref: ../../components/schemas/auth/loginResponse.yaml
-      '401':
-        $ref: ../../components/responses/401.yaml
+tags:
+  - Auth
+summary: Log in a user
+operationId: loginUser
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/login.yaml
+responses:
+  '200':
+    description: User successfully logged in
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/loginResponse.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml

@@ -1,23 +1,38 @@
-/auth/reset-pwd:
-  post:
-    tags:
-      - Auth
-    summary: Reset password
-    operationId: resetPassword
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: ../../components/schemas/auth/resetPassword.yaml
-    responses:
-      '200':
-        description: Password successfully reset
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Password has been reset
+tags:
+  - Auth
+summary: Reset password
+operationId: resetPassword
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/resetPassword.yaml
+responses:
+  '200':
+    description: Password successfully reset
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Password has been reset
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    description: User not found or invalid token
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: User not found or token is invalid
