@@ -14,7 +14,7 @@ tags:
     description: Operations related to user authentication
 
 servers:
-  -url: https://nodejs-hw-mongodb-hw3-crud-9qln.onrender.com
+  - url: https://nodejs-hw-mongodb-hw3-crud-9qln.onrender.com
 
 security:
   - bearerAuth: []
