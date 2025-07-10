@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   version: 1.0.0
   title: RESTful API documentation for managing contacts and authentication
+  description: This is a documentation of contacts app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: This is a documentation of contacts app
 
 tags:
   - name: Contacts
@@ -20,39 +20,128 @@ security:
   - bearerAuth: []
 
 paths:
-  /contacts/{id}:
-    delete:
-      $ref: ../swagger/paths/contacts/{id}/delete.yaml
-    patch:
-      $ref: ../swagger/paths/contacts/{id}/patch.yaml
-    get:
-      $ref: ../swagger/paths/contacts/{id}/get.yaml
-
   /contacts:
     get:
-      $ref: ../swagger/paths/contacts/get.yaml
+      summary: Get all contacts
+      tags: [Contacts]
+      responses:
+        '200':
+          description: OK
     post:
-      $ref: ../swagger/paths/contacts/post.yaml
+      summary: Create a new contact
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contact'
+      responses:
+        '201':
+          description: Contact created
+
+  /contacts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get contact by ID
+      tags: [Contacts]
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    patch:
+      summary: Update contact by ID
+      tags: [Contacts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contact'
+      responses:
+        '200':
+          description: Contact updated
+    delete:
+      summary: Delete contact by ID
+      tags: [Contacts]
+      responses:
+        '204':
+          description: No Content
 
   /auth/login:
     post:
-      $ref: ../swagger/paths/auth/login.yaml
+      summary: User login
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginResponse'
 
   /auth/refresh:
     post:
-      $ref: ../swagger/paths/auth/refresh.yaml
+      summary: Refresh access token
+      tags: [Auth]
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokenResponse'
 
   /auth/logout:
     post:
-      $ref: ../swagger/paths/auth/logout.yaml
+      summary: Logout user
+      tags: [Auth]
+      responses:
+        '204':
+          description: Successfully logged out
 
   /auth/send-reset-email:
     post:
-      $ref: ../swagger/paths/auth/send-reset-email.yaml
+      summary: Send password reset email
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Email sent
 
   /auth/reset-pwd:
     post:
-      $ref: ../swagger/paths/auth/reset-pwd.yaml
+      summary: Reset password
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/resetPassword'
+      responses:
+        '200':
+          description: Password reset successful
 
 components:
   securitySchemes:
@@ -60,16 +149,49 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
     contact:
-      $ref: ../swagger/components/schemas/contact.yaml
-    loginResponse:
-      $ref: ../swagger/components/schemas/loginResponse.yaml
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        favorite:
+          type: boolean
     register:
-      $ref: ../swagger/components/schemas/register.yaml
-    resetPassword:
-      $ref: ../swagger/components/schemas/resetPassword.yaml
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    loginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
     tokenResponse:
-      $ref: ../swagger/components/schemas/tokenResponse.yaml
+      type: object
+      properties:
+        accessToken:
+          type: string
     userResponse:
-      $ref: ../swagger/components/schemas/userResponse.yaml
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+    resetPassword:
+      type: object
+      properties:
+        password:
+          type: string
+        token:
+          type: string
