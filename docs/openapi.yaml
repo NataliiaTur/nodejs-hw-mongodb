@@ -14,8 +14,6 @@ tags:
     description: Operations related to user authentication
 
 servers:
-  - url: http://localhost:3000
-    description: Local development server
   -url: https://nodejs-hw-mongodb-hw3-crud-9qln.onrender.com
 
 security:
