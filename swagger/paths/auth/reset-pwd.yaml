@@ -24,15 +24,4 @@ responses:
   '401':
     $ref: ../../components/responses/401.yaml
   '404':
-    description: User not found or invalid token
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 404
-            message:
-              type: string
-              example: User not found or token is invalid
+    $ref: ../../components/responses/404.yaml
